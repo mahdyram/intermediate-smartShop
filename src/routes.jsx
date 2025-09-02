@@ -1,12 +1,12 @@
-import { createBrowserRouter } from "react-router-dom";
+import { createHashRouter } from "react-router-dom";
 import Layout from "./components/Layout";
 import Main from "./components/main/Main";
 import CartPage from "./components/pages/CartPage";
 import ProductPage from "./components/pages/ProductPage";
 
-export const router = createBrowserRouter([
+export const router = createHashRouter([
   {
-    path: "/intermediate-smartShop/",
+    path: "/",
     element: <Layout />,
     children: [
       { index: true, element: <Main /> },
