@@ -6,7 +6,7 @@ import ProductPage from "./components/pages/ProductPage";
 
 export const router = createBrowserRouter([
   {
-    path: "/",
+    path: "/intermediate-smartShop/",
     element: <Layout />,
     children: [
       { index: true, element: <Main /> },
