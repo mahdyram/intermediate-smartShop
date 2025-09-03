@@ -1,9 +1,9 @@
-import { Box, InputBase, IconButton } from "@mui/material";
+import { Box, InputBase, IconButton, InputAdornment } from "@mui/material";
 import SearchIcon from "@mui/icons-material/Search";
 import CloseIcon from "@mui/icons-material/Close";
-import { InputAdornment } from "@mui/material";
 import { useDispatch, useSelector } from "react-redux";
 import { setSearchQuery } from "../../redux/productSlice";
+import { setCategory } from "../../redux/categorySlice";
 
 export default function SearchBar() {
   const dispatch = useDispatch();
@@ -31,7 +31,10 @@ export default function SearchBar() {
       <InputBase
         placeholder="Search products…"
         value={searchQuery}
-        onChange={(e) => dispatch(setSearchQuery(e.target.value))}
+        onChange={(e) => {
+          dispatch(setSearchQuery(e.target.value));
+          dispatch(setCategory("all-products"));
+        }}
         endAdornment={
           searchQuery && (
             <InputAdornment position="end">

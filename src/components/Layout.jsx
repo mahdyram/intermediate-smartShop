@@ -4,16 +4,24 @@ import ScrollToTop from "./ScrollToTop";
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchProducts } from "../redux/productSlice";
+import { fetchCategories } from "../redux/categorySlice";
 
 export default function Layout() {
   const dispatch = useDispatch();
-  const status = useSelector((state) => state.products.status);
+  const cStatus = useSelector((state) => state.categories.status);
+  const pStatus = useSelector((state) => state.products.status);
 
   useEffect(() => {
-    if (status === "idle") {
+    if (cStatus === "idle") {
+      dispatch(fetchCategories());
+    }
+  }, [cStatus, dispatch]);
+
+  useEffect(() => {
+    if (pStatus === "idle") {
       dispatch(fetchProducts());
     }
-  }, [status, dispatch]);
+  }, [pStatus, dispatch]);
 
   return (
     <div className="layout">

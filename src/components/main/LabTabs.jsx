@@ -1,59 +1,41 @@
+import CircularProgress from "@mui/material/CircularProgress";
+import TabContext from "@mui/lab/TabContext";
+import TabPanel from "@mui/lab/TabPanel";
+import Alert from "@mui/material/Alert";
+import TabList from "@mui/lab/TabList";
 import Box from "@mui/material/Box";
 import Tab from "@mui/material/Tab";
-import TabContext from "@mui/lab/TabContext";
-import TabList from "@mui/lab/TabList";
-import TabPanel from "@mui/lab/TabPanel";
-import CircularProgress from "@mui/material/CircularProgress";
-import Alert from "@mui/material/Alert";
-import { useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import ProductsGrid from "./ProductsGrid";
-import { useSelector } from "react-redux";
-import axios from "axios";
+import { setCategory } from "../../redux/categorySlice";
 
 export default function LabTabs() {
-  const [categories, setCategories] = useState([]);
-  const products = useSelector((state) => state.products.items);
-  const status = useSelector((state) => state.products.status);
-  const [category, setCategory] = useState(
-    localStorage.getItem("selectedCategory") || "all-products"
+  const dispatch = useDispatch();
+  const { items: categories, selected: category } = useSelector(
+    (state) => state.categories
   );
-  const searchQuery = useSelector((state) => state.products.searchQuery);
+  const {
+    searchQuery,
+    items: products,
+    status: pStatus,
+  } = useSelector((state) => state.products);
 
-  useEffect(() => {
-    localStorage.setItem("selectedCategory", category);
-  }, [category]);
-
-  const handleChange = (e, newCategory) => setCategory(newCategory);
-
-  useEffect(() => {
-    async function getCategories() {
-      try {
-        const { data } = await axios.get(
-          "https://dummyjson.com/products/category-list"
-        );
-        setCategories(["all-products", ...data]);
-      } catch (err) {
-        console.error("Axios request failed:", err);
-      }
-    }
-
-    getCategories();
-  }, []);
+  const handleChange = (e, newCategory) => dispatch(setCategory(newCategory));
 
   const filteredProducts = products.filter(
     (p) =>
       (category === "all-products" || p.category === category) &&
-      p.title.toLowerCase().startsWith(searchQuery.toLowerCase())
+      p.title.toLowerCase().includes(searchQuery.trim().toLowerCase())
   );
 
-  if (status === "loading")
+  if (pStatus === "loading")
     return (
       <Box sx={{ display: "flex", justifyContent: "center", p: 4 }}>
         <CircularProgress />
       </Box>
     );
 
-  if (status === "failed")
+  if (pStatus === "failed")
     return (
       <Box sx={{ p: 4 }}>
         <Alert severity="error">

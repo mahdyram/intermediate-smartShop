@@ -12,12 +12,14 @@ export const fetchProducts = createAsyncThunk(
 
 const productSlice = createSlice({
   name: "products",
+
   initialState: {
     items: [],
     status: "idle",
     error: null,
     searchQuery: "",
   },
+
   reducers: {
     setSearchQuery: (state, action) => {
       state.searchQuery = action.payload;
